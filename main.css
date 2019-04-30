@@ -1,0 +1,105 @@
+#titulo{
+    text-align: center;
+    font-family: 'Raleway', sans-serif;
+    font-size: 23px;
+    font-weight: 800;
+    border-bottom: 3px solid #e46124;
+    text-align: center;
+    border-width: 2px;
+    width: 40%;
+    align-content: center;
+    float: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 30%;
+}
+p{
+    font-family: 'Raleway', sans-serif;
+}
+
+#description{
+    text-align: center;
+    font-family: 'Raleway', sans-serif;
+    color: grey;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+#digivice{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 15%;
+    margin-top: 5%;
+
+}
+
+#digivice_instruction{
+    text-align: center;
+    font-family: 'Raleway', sans-serif;
+    font-weight: bold;
+    margin-top: 2%; 
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+    
+    
+}
+
+
+html {
+    height: 100%;
+    text-align: center;
+
+}
+  
+body {
+  height: 100%;
+}
+
+#egg_forms{
+    display: inline-block;
+}
+
+#choose_digieggs{
+    text-align: center;
+
+    
+}
+
+
+#arena{
+    border: 1px solid grey;
+    max-width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+    min-height: 100%;
+}
+#aliado{
+    text-align: right;
+    max-width: 30%;
+    margin-bottom: 2%;
+}
+#oponente{
+    text-align:right;
+    max-width: 80%;
+    margin-top: 5%;
+}
+html {
+    height: 100%;
+    text-align: center;
+
+}
+  
+body {
+    height: 100%;
+}
+
+#start{
+    max-width: 0px;
+}
+p{
+    font-family: 'Raleway', sans-serif;
+
+}
+
