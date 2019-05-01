@@ -1,10 +1,9 @@
 /**
  * 
- * Nelson Luiz Serpa de Oliveira
+ 
  * 9793502
  * Parte 1 - Projeto POO
  * Disciplina: Programação Orientada a Objetos - 2019.1
- * Professor: João Batista do Espirito Santo
  * 
  */
 
