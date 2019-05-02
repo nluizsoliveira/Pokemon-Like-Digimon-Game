@@ -1,4 +1,12 @@
-
+/**
+ * 
+ * Nelson Luiz Serpa de Oliveira
+ * 9793502
+ * Parte 1 - Projeto POO
+ * Disciplina: Programação Orientada a Objetos - 2019.1
+ * Professor: João Batista do Espirito Santo
+ * 
+ */
 
 //Classe principal do programa, que armazena informações relativas a um digimon. 
 /**
@@ -164,6 +172,7 @@ class Digimon {
 
     random_attack(Enemy: Digimon){
         this.tackle(Enemy);
+        return 1;
     }
 
    /*Funcao que controla o ataque de um digimon a outro, baseada na escolha de um ataque*/
@@ -187,12 +196,12 @@ class Digimon {
                 await pagina.delay(5);
                 if(Enemy.getCurrent_Hp() <= 0){ //Caso o inimigo morra
                     await pagina.delay(5);
-                    alert("Parabéns, você eliminou o inimigo! Ele evoluiu para continuar a batalha, e você tambem.");
                     if(this.level == 2){
                         alert("O jogo acabou");
                         document.location.reload();
 
                     }
+                    alert("Parabéns, você eliminou o inimigo! Ele evoluiu para continuar a batalha, e você tambem.");
                     await pagina.evolve(); //evolui o digimon. A funcao ainda nao esta totalmente implementada.
                     
                 }
@@ -236,12 +245,13 @@ class Digimon {
 
                 if(Enemy.getCurrent_Hp() <= 0){
                     await pagina.delay(5);
-                    alert("Parabéns, você eliminou o inimigo! Ele evoluiu para continuar a batalha, e você tambem.");
                     if(this.level == 2){
                         alert("O jogo acabou");
                         document.location.reload();
 
                     }
+                    alert("Parabéns, você eliminou o inimigo! Ele evoluiu para continuar a batalha, e você tambem.");
+
                     await pagina.evolve();
                     
                 }
@@ -281,18 +291,127 @@ class Rookie extends Digimon{
         }
 
         else this.bite(Enemy);
+
+        return rand;
+    }
+
+    async attack(atk_choice: number, Enemy: Digimon, pagina: page){
+
+        //Se o golpe escolhido for tackle, o ataque prossegue. 
+        if(atk_choice == 1 || atk_choice == 2){
+            //O digimon mais rapido ataca primeiro. 
+            if (this.getSpeed() >= Enemy.getSpeed()){
+
+                if(atk_choice == 1){
+                    this.tackle(Enemy);
+                    pagina.digivice_instruction!.innerHTML = (this.getName()+" used Tackle!");//insere no HTML de instrucoes o aviso de ataque
+
+                }
+                else {
+                    this.bite(Enemy);
+                    pagina.digivice_instruction!.innerHTML = (this.getName()+" used Bite!");//insere no HTML de instrucoes o aviso de ataque
+
+                }
+
+                await pagina.delay(2000);  //Espera 2 segundos para dar naturalidade ao processo
+                pagina.atualiza_arena(); //Chama função de pagina que atualiza o campo de combate com os atributos após o combate
+                
+                await pagina.delay(5);
+                if(Enemy.getCurrent_Hp() <= 0){ //Caso o inimigo morra
+                    await pagina.delay(5);
+                    if(this.getLevel() == 2){
+                        alert("O jogo acabou");
+                        document.location.reload();
+
+                    }
+                    alert("Parabéns, você eliminou o inimigo! Ele evoluiu para continuar a batalha, e você tambem.");
+                    await pagina.evolve(); //evolui o digimon. A funcao ainda nao esta totalmente implementada.
+                    
+                }
+                
+                else{//Caso o inimigo não morra, ele ataca e o processo acima se repete.
+                    await pagina.delay(5);
+                    let atk: number = Enemy.random_attack(this);
+                    if(atk == 1) pagina.digivice_instruction!.innerHTML = ("Enemy" + Enemy.getName()+" used Tackle!");
+                    else if (atk == 2)pagina.digivice_instruction!.innerHTML = ("Enemy" + Enemy.getName()+" used Bite!");
+                    
+                    await pagina.delay(2000);
+                    pagina.atualiza_arena();
+
+    
+                    if(this.getCurrent_Hp() <= 0){//Caso o inimigo te elimine, é alertado que o jogo acabou e a página refresha
+                        alert("The game's over! You lost");
+                        document.location.reload();
+                        
+                    }
+                }
+
+            }
+
+            else{//Se o inimigo for mais rápido, o mesmo ocorre, mas com ele atacando primeiro.
+                await pagina.delay(5);
+                let  atk: number = (Enemy.random_attack(this));
+                if(atk == 1) pagina.digivice_instruction!.innerHTML = ("Enemy" + Enemy.getName()+" used Tackle!");
+                else if (atk == 2)pagina.digivice_instruction!.innerHTML = ("Enemy" + Enemy.getName()+" used Bite!");
+
+                await pagina.delay(2000);
+                pagina.atualiza_arena();
+
+
+                if(this.getCurrent_Hp() <= 0){
+                    alert("The game's over! You lost");
+                    document.location.reload();
+                }
+                else{
+                    await pagina.delay(5);
+
+                    if(atk_choice == 1){
+                        this.tackle(Enemy);
+                        pagina.digivice_instruction!.innerHTML = (this.getName()+" used Tackle!");//insere no HTML de instrucoes o aviso de ataque
+    
+                    }
+                    else {
+                        this.bite(Enemy);
+                        pagina.digivice_instruction!.innerHTML = (this.getName()+" used Bite!");//insere no HTML de instrucoes o aviso de ataque
+    
+                    }
+
+                    await pagina.delay(2000);
+                    pagina.atualiza_arena();
+                }
+
+                if(Enemy.getCurrent_Hp() <= 0){
+                    await pagina.delay(5);
+                    if(this.getLevel() == 2){
+                        alert("O jogo acabou");
+                        document.location.reload();
+
+                    }
+                    alert("Parabéns, você eliminou o inimigo! Ele evoluiu para continuar a batalha, e você tambem.");
+                    await pagina.evolve();
+                    
+                }
+            }
+        }
+        
+        //se o ataque escolhido não for tackle, é informado ao usuário que o digimon precisa evoluir para executar a função
+        else{
+            pagina.digivice_instruction!.innerHTML = ("You need to evolve to use this attack! Try tackle or bite!");
+            
+        }
     }
 }
 
-//Digimons mega podem utilizar energy_wave. Em construção, ainda não há digimons mega nesta fase de implementacao.
+//Digimons mega podem utilizar laser. 
 class Mega extends Rookie{
-    energy_wave(Enemy: Digimon){
+
+    laser(Enemy: Digimon){
         Enemy.setCurrent_Hp(Enemy.getCurrent_Hp() - 2*this.getAtk());
         this.setCurrent_Stamina(this.getCurrent_Stamina()-3);
     }
 
     random_attack(Enemy: Digimon){
-        let rand = Math.floor((Math.random() * 3) + 1);
+        let rand: number = Math.floor((Math.random() * 3) + 1);
 
         if(rand == 1){
             this.tackle(Enemy);
@@ -302,8 +421,120 @@ class Mega extends Rookie{
             this.bite(Enemy);
         }
 
-        else this.energy_wave(Enemy);
+        else this.laser(Enemy);
+
+        return rand;
     }
+
+    async attack(atk_choice: number, Enemy: Digimon, pagina: page){
+
+        //O digimon mais rapido ataca primeiro. 
+        if (this.getSpeed() >= Enemy.getSpeed()){
+
+            if(atk_choice == 1){
+                this.tackle(Enemy);
+                pagina.digivice_instruction!.innerHTML = (this.getName()+" used Tackle!");//insere no HTML de instrucoes o aviso de ataque
+
+            }
+            else if(atk_choice == 2) {
+                this.bite(Enemy);
+                pagina.digivice_instruction!.innerHTML = (this.getName()+" used Bite!");//insere no HTML de instrucoes o aviso de ataque
+
+            }
+
+            else{
+                this.laser(Enemy);
+                pagina.digivice_instruction!.innerHTML = (this.getName()+" used Laser!");//insere no HTML de instrucoes o aviso de ataque
+
+            }
+
+            await pagina.delay(2000);  //Espera 2 segundos para dar naturalidade ao processo
+            pagina.atualiza_arena(); //Chama função de pagina que atualiza o campo de combate com os atributos após o combate
+            
+            await pagina.delay(5);
+            if(Enemy.getCurrent_Hp() <= 0){ //Caso o inimigo morra
+                await pagina.delay(5);
+                if(this.getLevel() == 2){
+                    alert("O jogo acabou");
+                    document.location.reload();
+
+                }
+                alert("Parabéns, você eliminou o inimigo! Ele evoluiu para continuar a batalha, e você tambem.");
+                await pagina.evolve(); //evolui o digimon. A funcao ainda nao esta totalmente implementada.
+                
+            }
+            
+            else{//Caso o inimigo não morra, ele ataca e o processo acima se repete.
+                await pagina.delay(5);
+                let atk: number = Enemy.random_attack(this);
+                if(atk == 1) pagina.digivice_instruction!.innerHTML = ("Enemy" + Enemy.getName()+" used Tackle!");
+                else if (atk == 2) pagina.digivice_instruction!.innerHTML = ("Enemy" + Enemy.getName()+" used Bite!");
+                else pagina.digivice_instruction!.innerHTML = ("Enemy" + Enemy.getName()+" used Laser!");
+                await pagina.delay(2000);
+                pagina.atualiza_arena();
+
+
+                if(this.getCurrent_Hp() <= 0){//Caso o inimigo te elimine, é alertado que o jogo acabou e a página refresha
+                    alert("The game's over! You lost");
+                    document.location.reload();
+                    
+                }
+            }
+
+        }
+
+        else{//Se o inimigo for mais rápido, o mesmo ocorre, mas com ele atacando primeiro.
+            await pagina.delay(5);
+            let  atk: number = (Enemy.random_attack(this));
+            if(atk == 1) pagina.digivice_instruction!.innerHTML = ("Enemy" + Enemy.getName()+" used Tackle!");
+            else if (atk == 2)pagina.digivice_instruction!.innerHTML = ("Enemy" + Enemy.getName()+" used Bite!");
+            else pagina.digivice_instruction!.innerHTML = ("Enemy" + Enemy.getName()+" used Laser!");
+            await pagina.delay(2000);
+            pagina.atualiza_arena();
+
+
+            if(this.getCurrent_Hp() <= 0){
+                alert("The game's over! You lost");
+                document.location.reload();
+            }
+            else{
+                await pagina.delay(5);
+
+                if(atk_choice == 1){
+                    this.tackle(Enemy);
+                    pagina.digivice_instruction!.innerHTML = (this.getName()+" used Tackle!");//insere no HTML de instrucoes o aviso de ataque
+
+                }
+                else if(atk_choice == 2){
+                    this.bite(Enemy);
+                    pagina.digivice_instruction!.innerHTML = (this.getName()+" used Bite!");//insere no HTML de instrucoes o aviso de ataque
+
+                }
+
+                else{
+                    this.laser(Enemy);
+                    pagina.digivice_instruction!.innerHTML = (this.getName()+" used Bite!");//insere no HTML de instrucoes o aviso de ataque
+
+                }
+
+                await pagina.delay(2000);
+                pagina.atualiza_arena();
+            }
+
+            if(Enemy.getCurrent_Hp() <= 0){
+                await pagina.delay(5);
+                if(this.getLevel() == 2){
+                    alert("O jogo acabou");
+                    document.location.reload();
+
+                }
+                alert("Parabéns, você eliminou o inimigo! Ele evoluiu para continuar a batalha, e você tambem.");
+                await pagina.evolve();
+                
+            }
+        }
+    }
+    
 }
 
 /**
@@ -677,8 +908,16 @@ class page{
             await this.delay(4000);
             document.location.reload();
         }
-        this.ally_digimon = new Rookie(this.ally_digimon);
-        this.enemy_digimon = new Rookie(this.enemy_digimon);
+
+        if(this.ally_digimon.getLevel() == 1){
+            this.ally_digimon = new Rookie(this.ally_digimon);
+            this.enemy_digimon = new Rookie(this.enemy_digimon);
+        }
+
+        else{
+            this.ally_digimon = new Mega(this.ally_digimon);
+            this.enemy_digimon = new Mega(this.enemy_digimon);
+        }
         
         //alert("Congrats! This is your new " + this.ally_digimon.getName());
         this.atualiza_arena();
