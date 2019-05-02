@@ -1,9 +1,10 @@
 /**
  * 
- 
+ * Nelson Luiz Serpa de Oliveira
  * 9793502
  * Parte 1 - Projeto POO
  * Disciplina: Programação Orientada a Objetos - 2019.1
+ * Professor: João Batista do Espirito Santo
  * 
  */
 
@@ -38,26 +39,26 @@ class Digimon {
         this.stamina = 5;
 
         //As 4 proximas linhas ajustam o nome e url para a foto do Digimon baseado na escolha do ovo
-        this.names  = ["Tokomon", "Chibimon", "Pabumon","Pagumon","Patamon","Gomamon","Guilmon","Lopmon","Seraphimon","MetalGarurumon","AncidentGreymon", "Cherubimon"];
-        this.digi_img_urls = ["./src/choice11.png", "./src/choice21.png", "./src/choice31.png", "./src/choice41.png", "./src/choice12.png", "./src/choice22.png", "./src/choice32.png", "./src/choice42.png", "./src/choice.png", "./src/choice13.png", "./src/choice23.png", "./src/choice33.png", "./src/choice43.png"];
+        this.names  = ["Renamon", "Gaomon", "Agumon","Lopmon","Kyubimon","Gaogamamon","MetalGreymon","Antylamon","Sakuyamon","MachGaogamon","Goldramon", "Cherubimon"];
+        this.digi_img_urls = ["./src/choice11.gif", "./src/choice21.gif", "./src/choice31.gif", "./src/choice41.gif", "./src/choice12.gif", "./src/choice22.gif", "./src/choice32.gif", "./src/choice42.gif", "./src/choice13.gif", "./src/choice23.gif", "./src/choice33.gif", "./src/choice43.gif"];
         this.name = this.names[this.choice-1];
         this.url = this.digi_img_urls[this.choice - 1];
         
         //Ajusta ataque, velocidade e HP à escolha de digimon do usuario 
-        if(this.choice == 1){
+        if(this.choice == 1 || this.choice == 5 || this.choice == 9){
             this.speed = 1.2;
             this.atk = 1.2;
-            this.hp = 15;
+            this.hp = 20;
         }
 
-        else if(this.choice == 2){
+        else if(this.choice == 2 || this.choice == 6 || this.choice == 10){
             this.speed = 2;
             this.atk = 1.5;
-            this.hp = 10;
+            this.hp = 12;
 
         }
 
-        else if(this.choice == 3){
+        else if(this.choice == 3 || this.choice == 7 || this.choice == 11){
             this.speed = 1.5;
             this.atk = 2;
             this.hp = 10;
@@ -66,7 +67,7 @@ class Digimon {
         else{
             this.speed = 1.5;
             this.atk = 2;
-            this.hp = 8;
+            this.hp = 7;
         }
         //seta hp e stamina atual como maximos
         this.current_hp = this.hp;
@@ -155,6 +156,7 @@ class Digimon {
 
     //funcao que incrementa o nivel de um digimon e o deixa mais forte
     level_up(){
+        this.level++;
         this.stamina++;
         this.atk = 1.1*(this.atk);
         this.hp = 1.1*this.hp;
@@ -180,6 +182,7 @@ class Digimon {
      * 
      */
     async attack(atk_choice: number, Enemy: Digimon, pagina: page){
+
         //Se o golpe escolhido for tackle, o ataque prossegue. 
         if(atk_choice == 1){
             //O digimon mais rapido ataca primeiro. 
@@ -187,19 +190,27 @@ class Digimon {
                 this.tackle(Enemy);
                 pagina.digivice_instruction!.innerHTML = (this.getName()+" used Tackle!");//insere no HTML de instrucoes o aviso de ataque
                 await pagina.delay(2000);  //Espera 2 segundos para dar naturalidade ao processo
-                pagina.atualiza_arena(this, Enemy); //Chama função de pagina que atualiza o campo de combate com os atributos após o combate
+                pagina.atualiza_arena(); //Chama função de pagina que atualiza o campo de combate com os atributos após o combate
                 
+                await pagina.delay(5);
                 if(Enemy.getCurrent_Hp() <= 0){ //Caso o inimigo morra
-                    alert("Você eliminou o inimigo. O resto do jogo ainda não está totalmente programado.");
-                    pagina.evolve(this, Enemy); //evolui o digimon. A funcao ainda nao esta totalmente implementada.
+                    await pagina.delay(5);
+                    alert("Parabéns, você eliminou o inimigo! Ele evoluiu para continuar a batalha, e você tambem.");
+                    if(this.level == 2){
+                        alert("O jogo acabou");
+                        document.location.reload();
+
+                    }
+                    await pagina.evolve(); //evolui o digimon. A funcao ainda nao esta totalmente implementada.
                     
                 }
-
+                
                 else{//Caso o inimigo não morra, ele ataca e o processo acima se repete.
+                    await pagina.delay(5);
                     Enemy.random_attack(this);
                     pagina.digivice_instruction!.innerHTML = ("Enemy" + Enemy.getName()+" used Tackle!");
                     await pagina.delay(2000);
-                    pagina.atualiza_arena(this, Enemy);
+                    pagina.atualiza_arena();
 
     
                     if(this.current_hp <= 0){//Caso o inimigo te elimine, é alertado que o jogo acabou e a página refresha
@@ -212,10 +223,11 @@ class Digimon {
             }
 
             else{//Se o inimigo for mais rápido, o mesmo ocorre, mas com ele atacando primeiro.
+                await pagina.delay(5);
                 Enemy.random_attack(this);
                 pagina.digivice_instruction!.innerHTML = ("Enemy "+ Enemy.getName()+" used Tackle!");
                 await pagina.delay(2000);
-                pagina.atualiza_arena(this, Enemy);
+                pagina.atualiza_arena();
 
 
                 if(this.current_hp <= 0){
@@ -223,15 +235,23 @@ class Digimon {
                     document.location.reload();
                 }
                 else{
+                    await pagina.delay(5);
                     this.tackle(Enemy);
                     pagina.digivice_instruction!.innerHTML = (this.getName()+" used Tackle!");
                     await pagina.delay(2000);
-                    pagina.atualiza_arena(this, Enemy);
+                    pagina.atualiza_arena();
                 }
 
                 if(Enemy.getCurrent_Hp() <= 0){
-                    alert("Você eliminou o inimigo. O resto do jogo ainda não está totalmente programado.");
-                    pagina.evolve(this, Enemy);
+                    await pagina.delay(5);
+                    alert("Parabéns, você eliminou o inimigo! Ele evoluiu para continuar a batalha, e você tambem.");
+                    if(this.level == 2){
+                        alert("O jogo acabou");
+                        document.location.reload();
+
+                    }
+                    await pagina.evolve();
+                    
                 }
             }
         }
@@ -252,6 +272,8 @@ class Rookie extends Digimon{
     constructor(old_digimon: Digimon){
         super(old_digimon.getChoice() + 4); //São 4 digimons iniciais (3 aliados e 1 inimigo), cada um com 
                                             //3 evoluções. Pular 4 posicoes no vetor indica ir para a proxima evolucao correspondente
+        this.setLevel(old_digimon.getLevel());
+
     }
 
     bite(Enemy: Digimon){
@@ -309,6 +331,8 @@ class Mega extends Rookie{
  * 
  */
 class page{
+    public ally_digimon: Digimon;
+    public enemy_digimon: Digimon;
     //TODOS os atributos de carater (HTMLElement|null) são REFERENCIAS a elementos HTML. Primeiramente, 
     //São declarados como elementos ou null pois o elemento com tal id pode ainda não existir.
     //Seu assignment é feito ao longo do programa.
@@ -358,6 +382,8 @@ class page{
     //atributos declarados sejam inicializados no construtor.
     //Os atributos comentados são os que realmente fazem diferença ao funcionamento do programa.
     constructor(){
+        this.ally_digimon = new Digimon(-1);
+        this.enemy_digimon =  new Digimon(4);
         this.digivice_instruction = document.getElementById("digivice_instruction");
         this.aliado = document.getElementById("aliado");
         this.arena = document.getElementById("arena");
@@ -377,8 +403,8 @@ class page{
         this.egg3 = null;
         this.eggchoice = 0;
         //guarda os nomes dos possiveis digimon
-        this.names  = ["Tokomon", "Chibimon", "Pabumon","Pagumon","Patamon","Gomamon","Guilmon","Lopmon","Seraphimon","MetalGarurumon","AncidentGreymon", "Cherubimon"];
-        this.digi_img_urls = ["./src/choice11.png", "./src/choice21.png", "./src/choice31.png", "./src/choice41.png", "./src/choice12.png", "./src/choice22.png", "./src/choice32.png", "./src/choice42.png", "./src/choice.png", "./src/choice13.png", "./src/choice23.png", "./src/choice33.png", "./src/choice43.png"];
+        this.names  = ["Renamon", "Gaomon", "Agumon","Lopmon","Kyubimon","Gaogamamon","MetalGreymon","Antylamon","Sakuyamon","MachGaogamon","Goldramon", "Cherubimon"];
+        this.digi_img_urls = ["./src/choice11.gif", "./src/choice21.gif", "./src/choice31.gif", "./src/choice41.gif", "./src/choice12.gif", "./src/choice22.gif", "./src/choice32.gif", "./src/choice42.gif", "./src/choice13.gif", "./src/choice23.gif", "./src/choice33.gif", "./src/choice43.gif"];
 
 
         this.foto_inimigo = null;
@@ -435,7 +461,7 @@ class page{
     //funcao principal de pagina. Atualiza TODOS os elementos do campo de batalha para que reflitam
     //as condicoes atuais dos digimon. É uma função polimórfica! Funciona para qualquer digimon,
     //seja base, rookie ou Mega
-    async atualiza_arena(aliado: Digimon, inimigo: Digimon){
+    async atualiza_arena(){
         //Assimilam descricao, digivice e arena a elementos HTML com suas respectivas Tags;
         this.description = document.getElementById("description");
         this.digivice_instruction = document.getElementById("digivice_instruction");
@@ -468,29 +494,29 @@ class page{
         this.stamina_aliado = document.getElementById("stamina_aliado");
 
         //de fato altera a foto do já assimilado elemento
-        this.altera_imagem(this.foto_inimigo, inimigo.getUrl());
-        this.altera_imagem(this.foto_aliado, aliado.getUrl());
+        this.altera_imagem(this.foto_inimigo, this.enemy_digimon.getUrl());
+        this.altera_imagem(this.foto_aliado, this.ally_digimon.getUrl());
 
         //De fato altera conteúdo do elemento da referência acima ssimilada
-        this.nome_inimigo!.innerHTML = inimigo.getName();
-        this.nome_aliado!.innerHTML = aliado.getName();
-        this.level_inimigo!.innerHTML = inimigo.getLevel().toString();
-        this.level_aliado!.innerHTML = inimigo.getLevel().toString();
+        this.nome_inimigo!.innerHTML = this.enemy_digimon.getName();
+        this.nome_aliado!.innerHTML = this.ally_digimon.getName();
+        this.level_inimigo!.innerHTML = this.enemy_digimon.getLevel().toString();
+        this.level_aliado!.innerHTML = this.enemy_digimon.getLevel().toString();
 
         //setta barras vida e stamina inimigo
-        this.vida_inimigo!.setAttribute('max', inimigo.getHp().toString());
-        this.vida_inimigo!.setAttribute('value', inimigo.getCurrent_Hp().toString());
+        this.vida_inimigo!.setAttribute('max', this.enemy_digimon.getHp().toString());
+        this.vida_inimigo!.setAttribute('value', this.enemy_digimon.getCurrent_Hp().toString());
 
-        this.stamina_inimigo!.setAttribute('max', inimigo.getStamina().toString());
-        this.stamina_inimigo!.setAttribute('value', inimigo.getCurrent_Stamina().toString());
+        this.stamina_inimigo!.setAttribute('max', this.enemy_digimon.getStamina().toString());
+        this.stamina_inimigo!.setAttribute('value', this.enemy_digimon.getCurrent_Stamina().toString());
         this.stamina_inimigo!.style.maxWidth = "0px";
 
         //setta barras vida e stamina aliados
-        this.vida_aliado!.setAttribute('max', aliado.getHp().toString());
-        this.vida_aliado!.setAttribute('value', aliado.getCurrent_Hp().toString());
+        this.vida_aliado!.setAttribute('max', this.ally_digimon.getHp().toString());
+        this.vida_aliado!.setAttribute('value', this.ally_digimon.getCurrent_Hp().toString());
 
-        this.stamina_aliado!.setAttribute('max', aliado.getStamina().toString());
-        this.stamina_aliado!.setAttribute('value', aliado.getCurrent_Stamina().toString());
+        this.stamina_aliado!.setAttribute('max', this.ally_digimon.getStamina().toString());
+        this.stamina_aliado!.setAttribute('value', this.ally_digimon.getCurrent_Stamina().toString());
 
         //assigna golpes aos botoes 
         this.golpe_um =  document.getElementById("golpe_um");
@@ -508,16 +534,19 @@ class page{
     
     //evento que ocorre quando o usuário clicka no digivice. Chama a imagem de boas vindas, 
     //e gera as 3 imagens de digiovo as quais o usuario pode escolher.
-    async event_one(ally_digimon: Digimon, enemy_digimon: Digimon){
+    async event_one(){
         //garante que, mesmo que o evento seja triggerado varias vezes, apenas rodará uma vez
         if(this.flux_control == 0){
-            this.altera_imagem(this.digivice, "./src/hello.png")    //troca a foto do digivace para a de boas vindas
+            await this.delay(100);
+            this.altera_imagem(this.digivice, "./src/hello.gif")    //troca a foto do digivace para a de boas vindas
+
             this.description!.innerText = "Welcome to DigiWorld! Your first task is to choose your Digimon."; //troca mensagem para de boas vindas
-            await this.delay(4000);
+            await this.delay(6200);
             this.digivice!.style.maxWidth = "0px";//apos 4 segundos, faz mensagens de boas vindas ficar invisivel
+            await this.delay(100);
 
             //descricao indica agora a escolha do digivice.
-            this.description!.innerText = "Egg1 encubates a very Resistant Digimon.\nEgg2 encubates a very Fast Digimon.\nEgg3 encubates a Powerful Damage-Dealer Digimon.\n\nClick on the egg you would like to choose!";
+            this.description!.innerHTML = '<br>Egg1 encubates a very <span style = "color: #FFDC00">Resistant</span> Digimon.<br>Egg2 encubates a very <span style = "color: #001f3f">Fast</span> Digimon.<br>Egg3 encubates a very <span style = "color: #FF4136">Strong</span> Digimon.<br><br>Click on the egg you would like to choose!';
             //muda HTML da página para que os 3 ovos sejam inseridos
             this.main_screen!.innerHTML = '    <img id = "egg1" src = "./src/choice10.png">     <img id = "egg2" src = "./src/choice20.png">     <img id = "egg3" src = "./src/choice30.png">';
             
@@ -528,11 +557,16 @@ class page{
             this.egg2 = document.getElementById("egg2");
             this.egg3 = document.getElementById("egg3");
 
+            //Ajusta tamanho dos ovos à tela
+            this.egg1!.style.maxWidth = "10%";
+            this.egg2!.style.maxWidth = "10%";
+            this.egg3!.style.maxWidth = "10%";
+
             //assimila a o evento dois a variáveis, para que se possa passá-lo como argumento ao event listener.
             //o primeiro argumento indica qual ovo foi escolhido.
-            let call_event_two_choice1 = ()=>{this.event_two(1, ally_digimon, enemy_digimon)};
-            let call_event_two_choice2 = ()=>{this.event_two(2, ally_digimon, enemy_digimon)};
-            let call_event_two_choice3 = ()=>{this.event_two(3, ally_digimon, enemy_digimon)};
+            let call_event_two_choice1 = ()=>{this.event_two(1)};
+            let call_event_two_choice2 = ()=>{this.event_two(2)};
+            let call_event_two_choice3 = ()=>{this.event_two(3)};
 
             //coloca event listeners de click nas imagens de ovo1, ovo2 e ovo3.
             //Ao clickar na imagem, o evento 2 é chamado e continua o programa.
@@ -544,7 +578,7 @@ class page{
 
     //evento dois apaga a tela de selecão de digiovos, mostra o gif do digimon nascendo, 
     //indice que o digimon está sendo atacado e gera a tela de guiar o digimon.
-    async event_two(choice: number, ally_digimon: Digimon, enemy_digimon: Digimon){
+    async event_two(choice: number){
         //guarda na pagina a escolha do digiovo
         this.eggchoice = choice;
         //esconde imagem dos ovos
@@ -553,7 +587,7 @@ class page{
         this.egg3!.style.maxWidth = "0px";
 
         let aux_digimon = new Digimon(choice); //cria um novo digimon, já configurado com a escolha certa!
-        Object.assign(ally_digimon, aux_digimon); //copia o novo digimon, que é configurado com a escolha correta
+        Object.assign(this.ally_digimon, aux_digimon); //copia o novo digimon, que é configurado com a escolha correta
                                                   //no digimon auxiliar previamente criado na main
         
         //insere gif de digimon nascendo na tela, aumenta seu tamanho para 30% da div em que esta contido
@@ -562,17 +596,16 @@ class page{
         this.digivice!.style.maxWidth = "30%";
         this.description!.innerText = "Hatching...";
         
-        await this.delay(5000);//o gif acima roda por 5 segundos para dar nocao de naturalidade, e impedir
+        await this.delay(4700);//o gif acima roda por 5 segundos para dar nocao de naturalidade, e impedir
         //que os proximos comandos atropelem os acima
         
         //altera descricao para indicar que o digimon novo nasceu
         this.description!.innerText=("Congrats! This is your new " + this.names[choice-1]);
         //insere na tela imagem com digimon novo
         this.altera_imagem(this.digivice, this.digi_img_urls[choice-1]);
-
         //assigna corretamente a imagem e o nome do digimon ao digimon novo
-        ally_digimon.setUrl(this.digi_img_urls[choice-1]);
-        ally_digimon.setName(this.names[choice-1]);
+        this.ally_digimon.setUrl(this.digi_img_urls[choice-1]);
+        this.ally_digimon.setName(this.names[choice-1]);
 
         
         await this.delay(4000); //espera 4 segundos antes de gerar a tela de digimon sendo atacado
@@ -590,8 +623,8 @@ class page{
         //alterar a url destas referencias para que mostrem outras imagens
         this.ally_digimon_pic = document.getElementById("foto_aliado");
         this.enemy_digimon_pic = document.getElementById("foto_inimigo");
-        this.altera_imagem(this.ally_digimon_pic, ally_digimon.getUrl());
-        this.altera_imagem(this.enemy_digimon_pic, enemy_digimon.getUrl());
+        this.altera_imagem(this.ally_digimon_pic, this.ally_digimon.getUrl());
+        this.altera_imagem(this.enemy_digimon_pic, this.enemy_digimon.getUrl());
 
         //altera descricao, indicando que o digimon foi atacado
         this.description!.innerText=("Oh no! " + this.names[choice-1] + " Is being attacked by " + this.names[3]);
@@ -599,7 +632,7 @@ class page{
         this.start!.style.maxWidth = "100%";
 
         //coloca um event listener na imagem de start, que dispara o evento tres quando clickada
-        let call_event_three = ()=>{this.event_three(ally_digimon, enemy_digimon)};
+        let call_event_three = ()=>{this.event_three()};
         this.start!.addEventListener("click", call_event_three);
         
     }
@@ -607,9 +640,9 @@ class page{
     //O evento insere o html de uma arena e a atualiza com os campos settados por atualiza_arena. 
     //Na area, são inseridos os botoes de tackle, bite e laser.
     //a cada um deles, é 
-    async event_three(ally_digimon: Digimon, enemy_digimon: Digimon){
+    async event_three(){
         this.body!.innerHTML = '    <h1 id="titulo">Pokemon-Like Digimon Game</h1><p id="description">Digimon is better than Pokemon at everything, except for its games. This project intents to recreate the classical Pokemon playstyle with Digimon.</p><div id="main_screen"><div id="arena"><div id="oponente"><img id="foto_inimigo" src="./src/choice41.png"><p></p><b id = "nome_inimigo">Inimigo</b> <b>Level </b> <b id = "level_inimigo">30</b><p></p><b>Hp: </b><progress id="vida_inimigo" value="30" max="100"></progress></b><p></p><b></b><progress id="stamina_inimigo" value="50" max="100"></div><div id="aliado"><img id="foto_aliado" src="./src/choice11.png"><p></p><b id = "nome_aliado">Aliado</b> <b>Level </b> <b id = "level_aliado">30</b><p></p><b>Hp: </b><progress id="vida_aliado" value="70" max="100"></progress></b><p></p><b> Stamina: </b><progress id="stamina_aliado" value="20" max="100"></div></div><p id="digivice_instruction">Oh no! Tokomon Is being attacked by Pagumon</p><img id="golpe_um" src="./src/tackle.png" style="max-width: 100%;"><img id="golpe_dois" src="./src/bite.png" style="max-width: 100%;"><img id="golpe_tres" src="./src/laser.png" style="max-width: 100%;"></div>';
-        this.atualiza_arena(ally_digimon, enemy_digimon);
+        this.atualiza_arena();
         
                                 /**
                                  * 
@@ -619,6 +652,8 @@ class page{
                                  * colocar os digimons na pagina e ao invés de passar os digimons como argumentos, que foram passados 
                                  * no click do evento passado, chamar os da pagina que sao atualizados ao final da funcao de evoluir();
                                  */
+        await this.delay(5);
+        alert("Use ctrl+ and ctrl- to adjust the arena for a more comfortable gameplay!\nClick once per attack command.")
 
         //attack(n: number, enemy: Digimon) possui como argumento n, o id do golpe a ser executado.
         //tacke_try recebe attack com n = 1;
@@ -626,13 +661,13 @@ class page{
         //laser_try recebe attack com n = 3;
         //as 3 funções são passadas ao eventlistener de click adequado a cada botão.
     
-        let tackle_try = ()=>{ally_digimon.attack(1, enemy_digimon,this)};
+        let tackle_try = ()=>{this.ally_digimon.attack(1, this.enemy_digimon,this)};
         this.golpe_um!.addEventListener("click", tackle_try);
 
-        let bite_try = ()=>{ally_digimon.attack(2, enemy_digimon,this)};
+        let bite_try = ()=>{this.ally_digimon.attack(2, this.enemy_digimon,this)};
         this.golpe_dois!.addEventListener("click", bite_try);
         
-        let laser_try = ()=>{ally_digimon.attack(3, enemy_digimon,this)};
+        let laser_try = ()=>{this.ally_digimon.attack(3, this.enemy_digimon,this)};
         this.golpe_tres!.addEventListener("click", laser_try);
 
     }
@@ -641,15 +676,31 @@ class page{
     //o digimon ganha nivel e seu inimigo também. 
     //são entao associados a novos rookies que possuem como argumento os digimons que antes eram.
     //o construtor de digimon rookies setta corretamente o novo digimon baseado nas propriedades do antigo.
-    async evolve(digimon: Digimon, enemy: Digimon){
-        digimon.level_up;
-        enemy.level_up;
-        digimon = new Rookie(digimon);
-        enemy = new Rookie(enemy);
-        alert("Congrats! This is your new " + digimon.getName());
-        this.atualiza_arena(digimon, enemy);
+    async evolve(){
+        this.ally_digimon.level_up();
+        this.enemy_digimon.level_up();
+
+        if(this.ally_digimon.getLevel() >=3){
+            this.main_screen!.innerHTML = '<img src = "./src/congrats.gif>"';
+            await this.delay(4000);
+            document.location.reload();
+        }
+        this.ally_digimon = new Rookie(this.ally_digimon);
+        this.enemy_digimon = new Rookie(this.enemy_digimon);
+        
+        //alert("Congrats! This is your new " + this.ally_digimon.getName());
+        this.atualiza_arena();
+        
     }
 
+
+    async you_lost(){
+        this.main_screen!.innerHTML = '<img src = "./src/congrats.gif>';
+        await this.delay(4000);
+        document.location.reload();
+
+
+    }
 
 }
 
@@ -659,16 +710,14 @@ class page{
      * Antes do HTML da página. Ou seja, o event listener do digivice nunca funcionaria, pois seria sempre nulo.
      */
 window.onload = function main() {
-    let ally_digimon = new Digimon(-1); //inicializa um digimon auxiliar com qualquer valor. Não se
-                                        //escolheu o digiovo ainda, não há como associar o digimon certo.
-    let enemy_digimon = new Digimon(4); //inicializa digimon inimigo, que de fato possui id 4
+   
     let pagina = new page(); 
     /**
      * A pagina de inicio do programa ja possui elementos HTML definidos. Ao criar e chamar uma nova pagina, tais
      * elementos são associados à pagina por seu id no construtor, e é possível então criar event listeners
      * em seus elementos.
      */           
-    let call_event_one = ()=>{pagina.event_one(ally_digimon, enemy_digimon)}; //associa a chamada de evento_um de página a uma variável
+    let call_event_one = ()=>{pagina.event_one()}; //associa a chamada de evento_um de página a uma variável
     pagina.digivice!.addEventListener("click", call_event_one); //cria um event_listener na imagem do digivice, que inicia o evento em call_event_one ao click.
     //pagina.digivice.removeEventListener("click", funcao);
 }
