@@ -514,7 +514,7 @@ class Mega extends Rookie{
 
                 else{
                     this.laser(Enemy);
-                    pagina.digivice_instruction!.innerHTML = (this.getName()+" used Bite!");//insere no HTML de instrucoes o aviso de ataque
+                    pagina.digivice_instruction!.innerHTML = (this.getName()+" used Laser!");//insere no HTML de instrucoes o aviso de ataque
 
                 }
 
