@@ -39,7 +39,7 @@ class Digimon {
         this.stamina = 5;
 
         //As 4 proximas linhas ajustam o nome e url para a foto do Digimon baseado na escolha do ovo
-        this.names  = ["Renamon", "Gaomon", "Agumon","Lopmon","Kyubimon","Gaogamamon","MetalGreymon","Antylamon","Sakuyamon","MachGaogamon","Goldramon", "Cherubimon"];
+        this.names  = ["Renamon", "Gaomon", "Agumon","Lopmon","Kyubimon","Gaogamon","MetalGreymon","Antylamon","Sakuyamon","MachGaogamon","Goldramon", "Cherubimon"];
         this.digi_img_urls = ["./src/choice11.gif", "./src/choice21.gif", "./src/choice31.gif", "./src/choice41.gif", "./src/choice12.gif", "./src/choice22.gif", "./src/choice32.gif", "./src/choice42.gif", "./src/choice13.gif", "./src/choice23.gif", "./src/choice33.gif", "./src/choice43.gif"];
         this.name = this.names[this.choice-1];
         this.url = this.digi_img_urls[this.choice - 1];
@@ -199,6 +199,7 @@ class Digimon {
                     if(this.level == 2){
                         alert("O jogo acabou");
                         document.location.reload();
+                        await pagina.delay(5);
 
                     }
                     alert("Parabéns, você eliminou o inimigo! Ele evoluiu para continuar a batalha, e você tambem.");
@@ -248,7 +249,7 @@ class Digimon {
                     if(this.level == 2){
                         alert("O jogo acabou");
                         document.location.reload();
-
+                        await pagina.delay(5);
                     }
                     alert("Parabéns, você eliminou o inimigo! Ele evoluiu para continuar a batalha, e você tambem.");
 
@@ -740,6 +741,8 @@ class page{
 
         this.stamina_aliado!.setAttribute('max', this.ally_digimon.getStamina().toString());
         this.stamina_aliado!.setAttribute('value', this.ally_digimon.getCurrent_Stamina().toString());
+        this.stamina_aliado!.style.maxWidth = "0px";
+
 
         //assigna golpes aos botoes 
         this.golpe_um =  document.getElementById("golpe_um");
@@ -864,7 +867,8 @@ class page{
     //Na area, são inseridos os botoes de tackle, bite e laser.
     //a cada um deles, é 
     async event_three(){
-        this.body!.innerHTML = '    <h1 id="titulo">Pokemon-Like Digimon Game</h1><p id="description">Digimon is better than Pokemon at everything, except for its games. This project intents to recreate the classical Pokemon playstyle with Digimon.</p><div id="main_screen"><div id="arena"><div id="oponente"><img id="foto_inimigo" src="./src/choice41.png"><p></p><b id = "nome_inimigo">Inimigo</b> <b>Level </b> <b id = "level_inimigo">30</b><p></p><b>Hp: </b><progress id="vida_inimigo" value="30" max="100"></progress></b><p></p><b></b><progress id="stamina_inimigo" value="50" max="100"></div><div id="aliado"><img id="foto_aliado" src="./src/choice11.png"><p></p><b id = "nome_aliado">Aliado</b> <b>Level </b> <b id = "level_aliado">30</b><p></p><b>Hp: </b><progress id="vida_aliado" value="70" max="100"></progress></b><p></p><b> Stamina: </b><progress id="stamina_aliado" value="20" max="100"></div></div><p id="digivice_instruction">Oh no! Tokomon Is being attacked by Pagumon</p><img id="golpe_um" src="./src/tackle.png" style="max-width: 100%;"><img id="golpe_dois" src="./src/bite.png" style="max-width: 100%;"><img id="golpe_tres" src="./src/laser.png" style="max-width: 100%;"></div>';
+        //Aqui
+        this.body!.innerHTML = '    <h1 id="titulo">Pokemon-Like Digimon Game</h1><p id="description">Digimon is better than Pokemon at everything, except for its games. This project intents to recreate the classical Pokemon playstyle with Digimon.</p><div id="main_screen"><div id="arena"><div id="oponente"><img id="foto_inimigo" src="./src/choice41.png"><p></p><b id = "nome_inimigo">Inimigo</b> <b>Level </b> <b id = "level_inimigo">30</b><p></p><b>Hp: </b><progress id="vida_inimigo" value="30" max="100"></progress></b><p></p><b></b><progress id="stamina_inimigo" value="50" max="100"></div><div id="aliado"><img id="foto_aliado" src="./src/choice11.png"><p></p><b id = "nome_aliado">Aliado</b> <b>Level </b> <b id = "level_aliado">30</b><p></p><b>Hp: </b><progress id="vida_aliado" value="70" max="100"></progress></b><p></p><b></b><progress id="stamina_aliado" value="20" max="100"></div></div><p id="digivice_instruction">Oh no! Tokomon Is being attacked by Pagumon</p><img id="golpe_um" src="./src/tackle.png" style="max-width: 100%;"><img id="golpe_dois" src="./src/bite.png" style="max-width: 100%;"><img id="golpe_tres" src="./src/laser.png" style="max-width: 100%;"></div>';
         this.atualiza_arena();
         
                                 /**
