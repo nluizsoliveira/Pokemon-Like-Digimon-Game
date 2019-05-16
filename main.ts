@@ -1,6 +1,6 @@
 /**
  * 
- * Nelson Luiz Serpa de Oliveira
+ * Nelson Luiz Oliveira
  * 9793502
  * Parte 1 - Projeto POO
  * Disciplina: Programação Orientada a Objetos - 2019.1
